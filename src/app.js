@@ -1,12 +1,15 @@
-//app.js
-import regeneratorRuntime from './utils/third-party/regenerator-runtime/runtime'
+// app.js
+import regeneratorRuntime from './utils/third-party/runtime'
+import { config } from './config' // eslint-disable-line
+let Raven = require('./utils/third-party/raven')
 
 App({
     onLaunch: async function () {
         // 展示本地存储能力
-        var logs = wx.getStorageSync('logs') || []
+        let logs = wx.getStorageSync('logs') || []
         logs.unshift(Date.now())
         wx.setStorageSync('logs', logs)
+        Raven.config('https://efa3290d01c24b46aa3d0adbae28cbf3@sentry.io/1385418', config.sentry).install()
 
         // 登录
         wx.login({
@@ -36,7 +39,14 @@ App({
         })
     },
     globalData: {
-        userInfo: null
+        userInfo: null,
+        oauthSession: {},   // 资源服务器session
+        syllabusSession: {}, // 课程表业务后台session
     },
 
+    onError(msg) {
+        Raven.captureException(msg, {
+            level: 'error'
+        })
+    }
 })

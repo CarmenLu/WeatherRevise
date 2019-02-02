@@ -1,6 +1,8 @@
-//index.js
-import regeneratorRuntime from '../../utils/third-party/regenerator-runtime/runtime'
-//获取应用实例
+// index.js
+// 获取应用实例
+
+import regeneratorRuntime from '../../utils/third-party/runtime' // eslint-disable-line
+
 const app = getApp()
 
 Page({
@@ -10,7 +12,7 @@ Page({
         hasUserInfo: false,
         canIUse: wx.canIUse('button.open-type.getUserInfo')
     },
-    //事件处理函数
+    // 事件处理函数
     bindViewTap: function () {
         wx.navigateTo({
             url: '../logs/logs'
