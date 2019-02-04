@@ -1,14 +1,16 @@
 import regeneratorRuntime from './third-party/runtime' // eslint-disable-line
 import { cache, cacheKeyMap } from './Cache'
-import { throwError } from './utils'
-import { wxGetUserInfo, wxLogin, wxRequest } from './wxApi'
+import { request, throwError } from './utils'
+import { wxGetUserInfo, wxLogin } from './wxApi'
 import { api } from '../api'
+
 const app = getApp()
 
 /**
  * 微信登录，获取 code 和 encryptData
+ * @returns {Promise<{userInfo: wx.UserInfo | data.userInfo | {} | * | ((options?: {encoding: string}) => {username: string; uid: number; gid: number; shell: any; homedir: string}), code: *, encryptedData: string, iv: string | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer}>}
  */
-const getWxLoginResult = async function (callback) {
+const getWxLoginResult = async function () {
 
     let loginResult = await wxLogin()
     let userResult = await wxGetUserInfo()
@@ -20,7 +22,11 @@ const getWxLoginResult = async function (callback) {
     }
 }
 
-let login = async function (options) {
+/**
+ * 微信小程序登录授权
+ * @returns {Promise<void>}
+ */
+const miniLogin = async function () {
 
     let wxLoginResult = await getWxLoginResult()
 
@@ -38,8 +44,9 @@ let login = async function (options) {
 
     // TODO 需要换成统一请求函数
     // 请求服务器登录地址，获得会话信息
-    let res = await wxRequest({
+    let res = await request({
         url: api.mini_pro_login,
+        method: 'GET',
         header: header
     })
 
@@ -48,33 +55,16 @@ let login = async function (options) {
     if (data.code !== '0') {
         throwError(`小程序微信登录出现错误，错误码: ${data.code}`)
     }
-    let loginKey = {
+    let loginState = {
         skey: data.skey,
         skeyExpiresAt: data.skeyExpiresAt,
         refresh_key: data.refresh_key,
         refreshKeyExpiresAt: data.refreshKeyExpiresAt
     }
-    cache.set(cacheKeyMap.loginKey, loginKey)
+    cache.set(cacheKeyMap.loginState, loginState)
     console.log('小程序授权成功')
-
-    // // 成功地响应会话信息
-    // if (data && data[constants.WX_SESSION_MAGIC_ID]) {
-    //     if (data.session) {
-    //         data.session.userInfo = userInfo;
-    //         Session.set(data.session);
-    //         options.success(userInfo);
-    //     } else {
-    //         let errorMessage = '登录失败(' + data.error + ')：' + (data.message || '未知错误');
-    //         let noSessionError = new LoginError(constants.ERR_LOGIN_SESSION_NOT_RECEIVED, errorMessage);
-    //         options.fail(noSessionError);
-    //     }
-    //
-    //     // 没有正确响应会话信息
-    // } else {
-    //     let errorMessage = '登录请求没有包含会话响应，请确保服务器处理 `' + options.loginUrl + '` 的时候正确使用了 SDK 输出登录结果';
-    //     let noSessionError = new LoginError(constants.ERR_LOGIN_SESSION_NOT_RECEIVED, errorMessage);
-    //     options.fail(noSessionError);
-    // }
 }
 
-export { login }
+
+
+export { miniLogin }

@@ -1,11 +1,21 @@
 const oauthHost = 'http://localhost:7001'
 const syllabusHost = 'http://localhost:7002'
 
-let api = {
-    login: oauthHost + '/oauth/login',
-    authorize: oauthHost + '/oauth/authorize',
-    stu_login: syllabusHost + '/user/stu_login',
-    mini_pro_login: syllabusHost + '/user/mini_pro_login',
+const api = {
+    login: oauthHost + '/oauth/login',  // 汕头大学账号账号密码验证
+    authorize: oauthHost + '/oauth/authorize',   // 课程表Oauth授权
+    stu_login: syllabusHost + '/user/stu_login',   // 课程表Oauth授权，重定向接口
+    mini_pro_login: syllabusHost + '/user/mini_pro_login',  // 小程序登录
+    refresh_login_state: syllabusHost + '/user/refresh_login_state',    // 刷新登录态
+    skey_test: syllabusHost + '/skey_test',    // 测试skey接口
 }
 
-export { api }
+const errCode = {
+    validateLoginState: {
+        no_skey: '01030101',
+        not_find_session: '01030102',
+        invalid_skey: '01030103'
+    }
+}
+
+export { api, errCode }

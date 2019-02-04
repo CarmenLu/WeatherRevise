@@ -16,11 +16,19 @@ class Cache {
         this[key] = value
         wx.setStorage({ key, data: value })
     }
+
+    remove(symbolKey) {
+        const key = symbolKey.toString()
+        if (this[key]) {
+            this[key] = null
+        }
+        wx.removeStorage({ key })
+    }
 }
 
 // 存放Cache key 的map
 const cacheKeyMap = {
-    loginKey: Symbol('login_key')
+    loginState: Symbol('login_key')
 }
 
 let cache = new Cache()

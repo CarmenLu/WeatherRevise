@@ -2,7 +2,7 @@
 import regeneratorRuntime from '../../utils/third-party/runtime' // eslint-disable-line
 import { api } from '../../api'
 import { throwError, request } from '../../utils/utils'
-import { login } from '../../utils/login'
+import { miniLogin } from '../../utils/login'
 
 let app = getApp()
 Page({
@@ -40,6 +40,7 @@ Page({
             res = await request({
                 url: api.login,
                 method: 'POST',
+                needLogin: false,
                 data: { account, password }
             })
         } catch (e) {
@@ -50,7 +51,7 @@ Page({
         let oauthSessionValue
         try {
             [oauthSessionKey, oauthSessionValue] = res.header['set-cookie'].split(';')[0].split('=')
-            console.log(`login success, session: ${oauthSessionKey}: ${oauthSessionValue}`)
+            console.log('login success')
         } catch (e) {
             throwError(`获取session失败: ${e}`)
         }
@@ -74,7 +75,9 @@ Page({
         try {
             res = await request({
                 url: api.authorize,
+                method: 'GET',
                 header: { cookie: `${oauthSessionKey}=${oauthSessionValue}` },
+                needLogin: false,
                 data: {
                     response_type: 'code',
                     client_id: 'stu',
@@ -99,10 +102,16 @@ Page({
 
         // 微信授权
         try {
-            await login()
+            await miniLogin()
         } catch (e) {
             throwError(`微信授权失败 ${e}`)
         }
+    },
+
+    req() {
+        request({
+            url: api.skey_test
+        })
     },
 
     /**
