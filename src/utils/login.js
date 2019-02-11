@@ -47,7 +47,8 @@ const miniLogin = async function () {
     let res = await request({
         url: api.mini_pro_login,
         method: 'GET',
-        header: header
+        header: header,
+        needLogin: false
     })
 
     let data = res.data
@@ -64,7 +65,6 @@ const miniLogin = async function () {
     cache.set(cacheKeyMap.loginState, loginState)
     console.log('小程序授权成功')
 }
-
 
 
 export { miniLogin }
