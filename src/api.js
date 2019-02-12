@@ -8,6 +8,7 @@ const api = {
     mini_pro_login: syllabusHost + '/user/mini_pro_login',  // 小程序登录
     refresh_login_state: syllabusHost + '/user/refresh_login_state',    // 刷新登录态
     skey_test: syllabusHost + '/skey_test',    // 测试skey接口
+    user_info: syllabusHost + '/user/info',    // 查询用户信息
 }
 
 const errCode = {

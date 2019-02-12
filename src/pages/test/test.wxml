@@ -5,3 +5,4 @@
 <button bindgetuserinfo="login" open-type="getUserInfo">登录</button>
 <button bindtap="authorize">授权</button>
 <button bindtap="req">请求</button>
+<button bindtap="getUserInfo">查询用户信息</button>

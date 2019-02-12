@@ -6,6 +6,7 @@ import { wxRequest } from './wxApi'
 import { cache, cacheKeyMap } from './Cache'
 import { config } from '../config'
 import { api, errCode } from '../api'
+
 let Raven = require('./third-party/raven')
 
 function throwError(msg) {
@@ -91,16 +92,15 @@ const request = async function (options) {
                 hasRetry = true
                 // 登录态失效，刷新后重试
                 await _refreshLoginState(cache.get(cacheKeyMap.loginState).refresh_key)
-                const res = await _req(_options)
-                console.log(`url: ${_options.url}`, res)
-                return res
+                beginTime = Date.now()
+                res = await _req(_options)
             } else {
                 // 刷新后重试失败，抛出异常
                 await logout()
                 throwError('登录态失效，刷新后重试仍失败')
             }
         }
-        console.log(`url: ${_options.url}`, res)
+        console.log(`url: ${_options.url} time: ${Date.now() - beginTime}ms`, res)
         return res
     }
 
@@ -133,6 +133,7 @@ const request = async function (options) {
     }
 
     // 发起请求
+    let beginTime = Date.now()
     const res = await _req(_options)
     return res
 }
