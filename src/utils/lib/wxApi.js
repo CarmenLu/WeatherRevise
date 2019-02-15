@@ -8,7 +8,7 @@
  * 微信接口Promise化
  * @param {Function} fn
  */
-const wxPromisify = function(fn) {
+const wxPromisify = function (fn) {
     return function (obj = {}) {
         return new Promise((resolve, reject) => {
             obj.success = function (res) {
@@ -27,5 +27,6 @@ const wxPromisify = function(fn) {
 const wxLogin = wxPromisify(wx.login)
 const wxGetUserInfo = wxPromisify(wx.getUserInfo)
 const wxRequest = wxPromisify(wx.request)
+const wxShowModal = wxPromisify(wx.showModal)
 
-export { wxLogin, wxGetUserInfo, wxRequest }
+export { wxPromisify, wxLogin, wxGetUserInfo, wxRequest, wxShowModal }

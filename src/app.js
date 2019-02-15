@@ -1,13 +1,13 @@
 // app.js
 import regeneratorRuntime from './utils/third-party/runtime'
-import { config } from './config'
-import { constant } from './constant' // eslint-disable-line
+import { config } from './config/config'
+import { constant } from './config/constant' // eslint-disable-line
 let Raven = require('./utils/third-party/raven')
 
 App({
     onLaunch: async function () {
         console.log(`environment ${config.environment} release: ${config.release}`)
-        if (config.environment === constant.environment) {
+        if (config.environment === constant.environment && config.sentry) {
             Raven.config(config.sentry.dsn, config.sentry.options).install()
         }
     },
