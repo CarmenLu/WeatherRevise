@@ -16,10 +16,7 @@ function initSocket() {
     socket = io('http://localhost:7003/req', {
 
         // 实际使用中可以在这里传递参数
-        query: {
-            // room: 'demo',
-            // userId: `client_${Math.random()}`,
-        },
+        query: {},
 
         transports: ['websocket']
     })
