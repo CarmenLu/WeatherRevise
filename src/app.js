@@ -16,12 +16,18 @@ App({
         // init Socket.io
         initSocket()
     },
+
     // 初始化sentry
     initSentry() {
-        if (config.environment === constant.environment && config.sentry) {
-            Raven.config(config.sentry.dsn, config.sentry.options).install()
-        } else {
-            console.log('开发环境不初始化sentry')
+        switch (true) {
+            case config.environment !== constant.production:
+                console.log('开发环境不初始化sentry')
+                break
+            case !config.sentry && config.sentry.dsn:
+                console.log('未配置sentry')
+                break
+            default:
+                Raven.config(config.sentry.dsn, config.sentry.options).install()
         }
     },
     globalData: {

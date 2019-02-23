@@ -1,7 +1,10 @@
 import { config } from './config'
 
+// 全局常量
 const constant = {
-    environment: Symbol(config.environment)
+    environment: config.environment,
+    production: 'production',
+    development: 'development',
 }
 
 // 存放Cache key 的map
