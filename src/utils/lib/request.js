@@ -12,6 +12,8 @@ import { api, errCode } from '../../config/api'
 import { cacheKeyMap } from '../../config/constant'
 import { throwError } from './error'
 
+const Raven = require('../third-party/raven')
+
 const app = getApp()
 
 const request = async function (options) {
@@ -125,6 +127,9 @@ const request = async function (options) {
     let currentPage = getCurrentPages()
     _options.data['page'] = currentPage.length > 0 && currentPage[currentPage.length - 1] ? currentPage[currentPage.length - 1].route : 'no page'
 
+    // socket
+    _options.header['socket_id'] = app.globalData.socket_id
+
     if (_options.needLogin) {
         let isLogin = await _validateLoginState()
         if (!isLogin) {
@@ -135,6 +140,15 @@ const request = async function (options) {
     } else {
         console.log('needLogin: false')
     }
+
+    // sentry 埋点
+    Raven.captureBreadcrumb({
+        category: 'ajax',
+        data: {
+            method: _options.method,
+            url: _options.url
+        }
+    })
 
     // 发起请求
     let beginTime = Date.now()
