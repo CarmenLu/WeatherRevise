@@ -1,0 +1,34 @@
+<view class='container'>
+  <view class='now'>
+        <view> <image class="img" src="../../img/Weather/{{nowwea.cond_code}}.png"></image></view>
+  <view class='cityCho' bindtap='chooseCity'>
+    <view class="iconfont icon-location:before" style="color:black;"></view>
+    <view class='city'>{{city+district+street||'定位中'}}</view>
+    </view>
+    <view class='nowtemperature'>
+      <text>{{nowtmp}} ℃</text>
+      </view>
+      <view class='weatherCondition'>
+
+      <view>{{nowwea.cond_txt}}</view>
+      </view>
+      </view>
+
+
+
+
+
+      <view class="forecast">
+        <view wx:for="{{daily_forecast}}" style="display:block;">
+        <view class="forecast1">
+     <view class="date1">  {{item.date}}</view>
+      <view class="wc1"> {{item.cond_txt_d}}</view>
+      <view ><image class="img1" src="../../img/Weather/{{item.cond_code_d}}.png"></image></view>
+      <view class="tmp1">  {{item.tmp_max}} ℃~ {{item.tmp_min}} ℃</view>
+      </view>
+        </view>
+        </view>
+        
+        </view>
+        
+        

@@ -1,11 +1,11 @@
-// const environment = 'production'
+﻿// const environment = 'production'
 const environment = 'development'
 const release = '1.0.0'
 
 let config = {
     environment,
     release,
-    app_id: '',
+    app_id: 'wx7a1cb1727668fcc7',
     sentry: {
         dsn: '',
         options: {
